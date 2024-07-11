@@ -28,10 +28,6 @@ else:
     with open(json_file, 'w') as file:
         json.dump(default_data, file, indent=4)
 
-
-#~/Pictures/Wallpapers/
-
-
 ##### comands #####
 def set_wallpaper_path(args):
     with open(json_file, 'r') as file:
@@ -52,7 +48,7 @@ def get_wallpaper_path(args):
 def list_wallpapers(args):
     with open(json_file, 'r') as file:
         data = json.load(file)
-        active_wallpaper = data["actual_wallpaper"]
+        active_wallpaper = data["current_wallpaper"]
         path = data["wallpapers_path"]
     path = os.path.expanduser(path)
     if os.path.exists(path):
@@ -93,7 +89,7 @@ def set_random_local(args):
     elif args.source == "local":
         with open(json_file, 'r') as file:
             data = json.load(file)
-            active_wallpaper = data["actual_wallpaper"]
+            active_wallpaper = data["current_wallpaper"]
             path = data["wallpapers_path"]
         path = os.path.expanduser(path)
         print(path)
@@ -109,27 +105,26 @@ def set_random_local(args):
                 print("done")
                 with open(json_file, 'r') as file:
                     data = json.load(file)
-                data["actual_wallpaper"] = wallpaper
+                data["current_wallpaper"] = wallpaper
                 with open(json_file, 'w') as file:
                     json.dump(data, file, indent=4)
             else:
                 print("That path is not a dir")
         else:
-            print("That folder do not exist. Set valid wallpapers folder with set_path")
+            print("That folder does not exist. Set a valid wallpaper folder with set_path.")
     else:
-        print("invalid option chosen")
+        print("invalid option")
 
 def next_wallpaper(args):
         with open(json_file, 'r') as file:
             data = json.load(file)
-            active_wallpaper = data["actual_wallpaper"]
+            active_wallpaper = data["current_wallpaper"]
             path = data["wallpapers_path"]
         path = os.path.expanduser(path)
         print(path)
         if os.path.exists(path):
             if os.path.isdir(path):
                 files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-                #print("Files using os module:", files)
                 if active_wallpaper == "":
                     wallpaper_index = 0
                 else:
@@ -143,7 +138,7 @@ def next_wallpaper(args):
                 print("done")
                 with open(json_file, 'r') as file:
                     data = json.load(file)
-                data["actual_wallpaper"] = wallpaper
+                data["current_wallpaper"] = wallpaper
                 with open(json_file, 'w') as file:
                     json.dump(data, file, indent=4)
             else:
@@ -153,20 +148,20 @@ def next_wallpaper(args):
 
 def main():
 
-    parser = argparse.ArgumentParser(prog="hypaper", description="Simple hyprland wallpapers util (hypaper)")
+    parser = argparse.ArgumentParser(prog="hypaper", description="Simple Hyprland wallpaper util")
     subparsers = parser.add_subparsers(dest="command",  help="")
 
     set_patch_command = subparsers.add_parser('set_path', help='Set the wallpaper path.')
     set_patch_command.add_argument('path', type=str, help='Path to the wallpaper.')
     set_patch_command.set_defaults(func=set_wallpaper_path)
 
-    get_path_command = subparsers.add_parser('get_path', help='Get the current wallpaper path.')
+    get_path_command = subparsers.add_parser('get_path', help='Get the path to the current wallpaper.')
     get_path_command.set_defaults(func=get_wallpaper_path)
 
-    list_command = subparsers.add_parser('list', help='List all local wallpapers.')
+    list_command = subparsers.add_parser('list', help='List all saved wallpapers.')
     list_command.set_defaults(func=list_wallpapers)
 
-    next_command = subparsers.add_parser('next_wallpaper', help='Change current wallpaper to next in wallpapers dir')
+    next_command = subparsers.add_parser('next_wallpaper', help='Change current wallpaper to the next one in the wallpapers directory.')
     next_command.set_defaults(func=next_wallpaper)
 
     random_local_command = subparsers.add_parser('set_random', help='Set random wallpaper from your wallpapers folder (local) or internet (online)')

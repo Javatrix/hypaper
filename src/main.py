@@ -13,10 +13,10 @@ save_images_path = os.path.join(home_dir, '.cache/hypaper')
 
 default_data = {
     "wallpapers_path": "~/Pictures/Wallpapers/",
-    "actual_wallpaper": ""
+    "current_wallpaper": ""
 }
-#### setup ####
 
+#### setup ####
 if os.path.exists(config_dir):
     if os.path.exists(json_file):
         pass
@@ -80,7 +80,7 @@ def set_random_local(args):
             with open(json_file, 'r') as file:
                 data = json.load(file)
                 file.close()
-            data["actual_wallpaper"] = ""
+            data["current_wallpaper"] = ""
             with open(json_file, 'w') as file:
                 json.dump(data, file, indent=4)
                 file.close()
